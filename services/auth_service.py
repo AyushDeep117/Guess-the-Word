@@ -1,4 +1,7 @@
-from werkzeug.security import generate_password_hash
+from werkzeug.security import (
+    generate_password_hash,
+    check_password_hash,
+)
 
 from database.db import get_connection
 from utils.validators import validate_username, validate_password
@@ -57,3 +60,33 @@ def create_user(username, password):
 
     finally:
         connection.close()
+
+def get_user_by_username(username):
+    connection = get_connection()
+
+    try:
+        row = connection.execute(
+            """
+            SELECT id, username, password_hash, role, created_at
+            FROM users
+            WHERE username = ?
+            """,
+            (username,),
+        ).fetchone()
+
+        return row
+
+    finally:
+        connection.close()
+
+
+def authenticate_user(username, password):
+    user = get_user_by_username(username)
+
+    if user is None:
+        return None
+
+    if not check_password_hash(user["password_hash"], password):
+        return None
+
+    return user

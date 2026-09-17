@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, session
 
 from config import Config
 from routes.auth_routes import auth_bp
@@ -13,7 +13,21 @@ def create_app():
 
     @app.route("/")
     def home():
-        return "Guess The Word - Application Running"
+
+        if "user_id" not in session:
+            return """
+                <h1>Guess The Word</h1>
+                <a href="/login">Login</a>
+                <br>
+                <a href="/register">Register</a>
+            """
+
+        return f"""
+            <h1>Guess The Word</h1>
+            <p>Welcome, {session["username"]}!</p>
+            <p>Role: {session["role"]}</p>
+            <a href="/logout">Logout</a>
+        """
 
     return app
 
