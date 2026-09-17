@@ -15,8 +15,14 @@ from services.auth_service import (
     authenticate_user,
 )
 
+from utils.auth import login_required
 
 auth_bp = Blueprint("auth", __name__)
+
+@auth_bp.route("/dashboard")
+@login_required
+def dashboard():
+    return render_template("dashboard.html")
 
 
 @auth_bp.route("/register", methods=["GET", "POST"])
@@ -66,7 +72,7 @@ def login():
         session["username"] = user["username"]
         session["role"] = user["role"]
 
-        return redirect(url_for("home"))
+        return redirect(url_for("auth.dashboard"))
 
     return render_template("login.html")
 
