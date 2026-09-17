@@ -1,11 +1,21 @@
 from flask import Flask
 
-app = Flask(__name__)
+from config import Config
 
 
-@app.route("/")
-def home():
-    return "Guess The Word - Application Running"
+def create_app():
+    app = Flask(__name__)
+
+    app.config.from_object(Config)
+
+    @app.route("/")
+    def home():
+        return "Guess The Word - Application Running"
+
+    return app
+
+
+app = create_app()
 
 
 if __name__ == "__main__":
