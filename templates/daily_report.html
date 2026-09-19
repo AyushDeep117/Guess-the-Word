@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Daily Report</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+</head>
+
+<body>
+
+    <h1>Daily Report</h1>
+
+    <form method="GET">
+
+        <label for="date">
+            Select Date:
+        </label>
+
+        <input
+            type="date"
+            id="date"
+            name="date"
+            value="{{ report['date'] }}"
+        >
+
+        <button type="submit">
+            View Report
+        </button>
+
+    </form>
+
+    <hr>
+
+    <h2>
+        Report for {{ report["date"] }}
+    </h2>
+
+    <div class="report-card">
+
+        <div>
+            <h3>Users</h3>
+            <p>{{ report["users"] }}</p>
+        </div>
+
+        <div>
+            <h3>Correct Guesses</h3>
+            <p>{{ report["correct_guesses"] }}</p>
+        </div>
+
+    </div>
+
+    <p>
+        <a href="{{ url_for('admin.dashboard') }}">
+            Back to Admin Dashboard
+        </a>
+    </p>
+
+</body>
+</html>

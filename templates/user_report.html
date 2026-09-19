@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>User Report - Guess The Word</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+</head>
+
+<body>
+
+    <h1>Guess The Word</h1>
+
+    <h2>User Report</h2>
+
+
+    <form method="GET">
+
+        <label for="user_id">
+            Select User:
+        </label>
+
+        <select
+            id="user_id"
+            name="user_id"
+            required
+        >
+
+            <option value="">
+                -- Select User --
+            </option>
+
+            {% for user in users %}
+
+                <option
+                    value="{{ user['id'] }}"
+                    {% if selected_user
+                        and selected_user['id'] == user['id'] %}
+                        selected
+                    {% endif %}
+                >
+                    {{ user['username'] }}
+                </option>
+
+            {% endfor %}
+
+        </select>
+
+        <button type="submit">
+            View Report
+        </button>
+
+    </form>
+
+
+    {% if selected_user %}
+
+        <hr>
+
+        <h3>
+            Report for:
+            {{ selected_user["username"] }}
+        </h3>
+
+
+        {% if report %}
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Date
+                        </th>
+
+                        <th>
+                            Words Tried
+                        </th>
+
+                        <th>
+                            Correct Guesses
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for row in report %}
+
+                        <tr>
+
+                            <td>
+                                {{ row["game_date"] }}
+                            </td>
+
+                            <td>
+                                {{ row["words_tried"] }}
+                            </td>
+
+                            <td>
+                                {{ row["correct_guesses"] }}
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        {% else %}
+
+            <p>
+                This user has not played any games yet.
+            </p>
+
+        {% endif %}
+
+    {% endif %}
+
+
+    <br>
+
+    <a href="{{ url_for('admin.dashboard') }}">
+        ← Back to Admin Dashboard
+    </a>
+
+</body>
+
+</html>

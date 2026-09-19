@@ -6,8 +6,7 @@ from database.db import get_connection
 MAX_DAILY_GAMES = 3
 MAX_GUESSES = 5
 
-def can_start_game(user_id):
-    return count_games_today(user_id) < MAX_DAILY_GAMES
+
 
 def count_games_today(user_id):
     connection = get_connection()
@@ -27,6 +26,11 @@ def count_games_today(user_id):
 
     finally:
         connection.close()
+
+def can_start_game(user_id):
+    games_today = count_games_today(user_id)
+
+    return games_today < MAX_DAILY_GAMES
 
 
 def get_random_word():

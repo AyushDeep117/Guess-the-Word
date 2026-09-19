@@ -13,19 +13,36 @@ from services.game_service import (
     get_game_for_user,
     get_guesses_for_game,
     submit_guess,
+    count_games_today,
+    MAX_DAILY_GAMES,
 )
 
 from utils.auth import login_required
 from utils.word_evaluator import evaluate_guess
-
+from utils.validators import validate_guess
 
 game_bp = Blueprint("game", __name__, url_prefix="/game")
+
 
 
 @game_bp.route("/")
 @login_required
 def game_home():
-    return render_template("game.html")
+
+    games_played = count_games_today(
+        session["user_id"]
+    )
+
+    games_remaining = max(
+        0,
+        MAX_DAILY_GAMES - games_played
+    )
+
+    return render_template(
+        "game.html",
+        games_played=games_played,
+        games_remaining=games_remaining,
+    )
 
 
 @game_bp.route("/start", methods=["POST"])
@@ -66,14 +83,23 @@ def play_game(game_id):
     )
 
     if game is None:
-        flash("Game not found.", "error")
-        return redirect(url_for("game.game_home"))
+        flash(
+            "Game not found.",
+            "error",
+        )
 
-    guesses = get_guesses_for_game(game_id)
+        return redirect(
+            url_for("game.game_home")
+        )
+
+    guesses = get_guesses_for_game(
+        game_id
+    )
 
     evaluations = []
 
     for stored_guess in guesses:
+
         evaluations.append(
             {
                 "guess": stored_guess["guess"],
@@ -100,7 +126,10 @@ def play_game(game_id):
         evaluations=evaluations,
     )
 
-@game_bp.route("/<int:game_id>/guess", methods=["POST"])
+@game_bp.route(
+    "/<int:game_id>/guess",
+    methods=["POST"]
+)
 @login_required
 def make_guess(game_id):
 
@@ -109,6 +138,24 @@ def make_guess(game_id):
         "",
     ).strip().upper()
 
+    is_valid, error_message = validate_guess(
+        guess
+    )
+
+    if not is_valid:
+
+        flash(
+            error_message,
+            "error",
+        )
+
+        return redirect(
+            url_for(
+                "game.play_game",
+                game_id=game_id,
+            )
+        )
+
     result, error = submit_guess(
         game_id,
         session["user_id"],
@@ -116,69 +163,45 @@ def make_guess(game_id):
     )
 
     if error == "game_not_found":
-        flash("Game not found.", "error")
-        return redirect(url_for("game.game_home"))
 
-    if error == "game_finished":
+        flash(
+            "Game not found.",
+            "error",
+        )
+
+    elif error == "game_finished":
+
         flash(
             "This game has already finished.",
             "error",
         )
-        return redirect(
-            url_for(
-                "game.play_game",
-                game_id=game_id,
-            )
-        )
 
-    if error == "guess_limit_reached":
+    elif error == "guess_limit_reached":
+
         flash(
             "You have used all 5 guesses.",
             "error",
         )
-        return redirect(
-            url_for(
-                "game.play_game",
-                game_id=game_id,
-            )
-        )
 
-    if result["status"] == "WON":
+    elif result["status"] == "WON":
+
         flash(
             "Congratulations! You guessed the word!",
             "success",
         )
 
     elif result["status"] == "LOST":
+
         flash(
             "Better luck next time!",
             "error",
         )
 
-    game = get_game_for_user(
-        game_id,
-        session["user_id"],
-    )
-
-    guesses = get_guesses_for_game(game_id)
-
-    evaluations = []
-
-    for stored_guess in guesses:
-
-        evaluations.append(
-            {
-                "guess": stored_guess["guess"],
-                "evaluation": evaluate_guess(
-                    game["target_word"],
-                    stored_guess["guess"],
-                ),
-            }
+    return redirect(
+        url_for(
+            "game.play_game",
+            game_id=game_id,
         )
-
-    return render_template(
-        "game.html",
-        game=game,
-        guesses=guesses,
-        evaluations=evaluations,
     )
+    
+    

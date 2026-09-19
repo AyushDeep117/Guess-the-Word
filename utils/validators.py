@@ -18,6 +18,18 @@ def validate_username(username):
 
     return True, ""
 
+def validate_guess(guess):
+    if not guess:
+        return False, "Guess is required."
+
+    if len(guess) != 5:
+        return False, "Guess must contain exactly 5 letters."
+
+    if not guess.isalpha():
+        return False, "Guess must contain letters only."
+
+    return True, ""
+
 
 def validate_password(password):
     """

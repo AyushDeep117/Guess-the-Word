@@ -1,8 +1,13 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 40px;
+}
+
 .game-board {
     display: flex;
     flex-direction: column;
     gap: 8px;
-    margin: 20px 0;
+    margin: 25px 0;
 }
 
 .guess-row {
@@ -11,30 +16,65 @@
 }
 
 .tile {
-    width: 50px;
-    height: 50px;
+    width: 55px;
+    height: 55px;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
+    border: 2px solid #999;
+
     font-size: 24px;
     font-weight: bold;
-
-    border: 1px solid #999;
+    text-transform: uppercase;
 }
 
 .tile.correct {
     background-color: #6aaa64;
     color: white;
+    border-color: #6aaa64;
 }
 
 .tile.present {
     background-color: #c9b458;
     color: white;
+    border-color: #c9b458;
 }
 
 .tile.absent {
     background-color: #787c7e;
     color: white;
+    border-color: #787c7e;
+}
+
+.tile.empty {
+    background-color: white;
+}
+
+.report-card {
+    display: flex;
+    gap: 30px;
+    margin: 25px 0;
+}
+
+.report-card > div {
+    border: 1px solid #ccc;
+    padding: 20px;
+    min-width: 150px;
+}
+
+table {
+    border-collapse: collapse;
+    margin-top: 25px;
+}
+
+th,
+td {
+    border: 1px solid #ccc;
+    padding: 10px 15px;
+}
+
+th {
+    font-weight: bold;
 }
