@@ -1,5 +1,5 @@
 import random
-
+from utils.word_evaluator import evaluate_guess
 from database.db import get_connection
 
 
@@ -148,6 +148,11 @@ def submit_guess(game_id, user_id, guess):
 
     next_guess_number = game["guesses_used"] + 1
 
+    evaluation = evaluate_guess(
+        game["target_word"],
+        guess,
+    )
+
     if guess == game["target_word"]:
         new_status = "WON"
 
@@ -211,7 +216,11 @@ def submit_guess(game_id, user_id, guess):
 
         connection.commit()
 
-        return next_guess_number, new_status
+        return {
+            "guess_number": next_guess_number,
+            "evaluation": evaluation,
+            "status": new_status,
+        }, None
 
     except Exception:
         connection.rollback()

@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/style.css') }}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Guess The Word</title>
@@ -41,16 +44,29 @@
             {{ game["guesses_used"] }} / 5
         </p>
 
-        <h3>Previous Guesses</h3>
+        <h3>Guesses</h3>
 
-        {% for guess in guesses %}
+<div class="game-board">
 
-            <p>
-                Guess {{ guess["guess_number"] }}:
-                {{ guess["guess"] }}
-            </p>
+    {% for row in evaluations %}
 
-        {% endfor %}
+        <div class="guess-row">
+
+            {% for index in range(5) %}
+
+                <div
+                    class="tile {{ row['evaluation'][index]|lower }}"
+                >
+                    {{ row["guess"][index] }}
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% endfor %}
+
+</div>
 
 
         {% if game["status"] == "ACTIVE" %}
