@@ -4,52 +4,73 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Guess The Word</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
 </head>
 
 <body>
 
-    <h1>Guess The Word</h1>
+<div class="auth-container">
 
-    <h2>Login</h2>
+    <div class="auth-card">
 
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            {% for category, message in messages %}
-                <p>{{ message }}</p>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
+        <h1>Guess The Word</h1>
 
-    <form method="POST">
+        <p class="subtitle">
+            Sign in to continue playing
+        </p>
 
-        <label for="username">Username:</label>
-        <input
-            type="text"
-            id="username"
-            name="username"
-            required
-        >
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message {{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
 
-        <br><br>
+        <form method="POST">
 
-        <label for="password">Password:</label>
-        <input
-            type="password"
-            id="password"
-            name="password"
-            required
-        >
+            <label>Username</label>
 
-        <br><br>
+            <input
+                type="text"
+                name="username"
+                required
+            >
 
-        <button type="submit">Login</button>
+            <label>Password</label>
 
-    </form>
+            <input
+                type="password"
+                name="password"
+                required
+            >
 
-    <p>
-        Don't have an account?
-        <a href="{{ url_for('auth.register') }}">Register</a>
-    </p>
+            <button
+                type="submit"
+                class="button button-primary large-button"
+            >
+                Login
+            </button>
+
+        </form>
+
+        <p class="auth-footer">
+            New player?
+
+            <a href="{{ url_for('auth.register') }}">
+                Create an account
+            </a>
+        </p>
+
+    </div>
+
+</div>
 
 </body>
 </html>

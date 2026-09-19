@@ -3,22 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Player Dashboard</title>
+
+    <title>Player Dashboard - Guess The Word</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
 </head>
 
 <body>
 
-    <h1>Guess The Word</h1>
+<div class="page-container">
 
-    <h2>Player Dashboard</h2>
+    <header class="topbar">
+        <div>
+            <h1>Guess The Word</h1>
+            <p class="subtitle">Player Dashboard</p>
+        </div>
 
-    <p>Welcome, {{ session["username"] }}!</p>
+        <a
+            href="{{ url_for('auth.logout') }}"
+            class="button button-secondary"
+        >
+            Logout
+        </a>
+    </header>
 
-    <p>Your role: {{ session["role"] }}</p>
+    <main class="dashboard">
 
-    <p>
-        <a href="{{ url_for('auth.logout') }}">Logout</a>
-    </p>
+        <section class="welcome-card">
+
+            <h2>
+                Welcome, {{ session["username"] }} 👋
+            </h2>
+
+            <p>
+                Ready to test your word skills?
+            </p>
+
+            <a
+                href="{{ url_for('game.game_home') }}"
+                class="button button-primary play-button"
+            >
+                🎮 Play Game
+            </a>
+
+        </section>
+
+        <section class="info-card">
+
+            <div class="info-item">
+                <span class="info-label">Role</span>
+                <span class="info-value">
+                    {{ session["role"] }}
+                </span>
+            </div>
+
+            <div class="info-item">
+                <span class="info-label">Daily Limit</span>
+                <span class="info-value">
+                    3 Games
+                </span>
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
 
 </body>
 </html>

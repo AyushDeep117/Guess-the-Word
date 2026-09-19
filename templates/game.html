@@ -1,39 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Guess The Word</title>
+    <title>Play Game - Guess The Word</title>
 
     <link
         rel="stylesheet"
         href="{{ url_for('static', filename='css/style.css') }}"
     >
-
 </head>
 
 <body>
 
-    <h1>Guess The Word</h1>
+<div class="page-container">
+
+    <header class="topbar">
+
+        <div>
+            <h1>Guess The Word</h1>
+            <p class="subtitle">Word Challenge</p>
+        </div>
+
+        <a
+            href="{{ url_for('auth.dashboard') }}"
+            class="button button-secondary"
+        >
+            Dashboard
+        </a>
+
+    </header>
 
     {% with messages = get_flashed_messages(with_categories=true) %}
 
         {% if messages %}
 
-            {% for category, message in messages %}
+            <div class="flash-container">
 
-                <p class="{{ category }}">
-                    {{ message }}
-                </p>
+                {% for category, message in messages %}
 
-            {% endfor %}
+                    <div class="flash-message {{ category }}">
+                        {{ message }}
+                    </div>
+
+                {% endfor %}
+
+            </div>
 
         {% endif %}
 
@@ -42,154 +58,257 @@
 
     {% if not game %}
 
-        <h2>Start a New Game</h2>
+        <main class="game-container">
 
-        <p>
-            Games played today:
-            {{ games_played }}
-            / 3
-        </p>
+            <section class="game-card">
 
-        <p>
-            Games remaining today:
-            {{ games_remaining }}
-        </p>
+                <h2>Ready to Play?</h2>
 
-        {% if games_remaining > 0 %}
+                <p class="game-description">
+                    Guess the hidden five-letter word in five attempts.
+                </p>
 
-            <form
-                method="POST"
-                action="{{ url_for('game.start_game') }}"
-            >
+                <div class="game-stats">
 
-                <button type="submit">
-                    Start Game
-                </button>
+                    <div class="stat">
+                        <span class="stat-label">
+                            Games Played
+                        </span>
 
-            </form>
+                        <strong>
+                            {{ games_played }} / 3
+                        </strong>
+                    </div>
 
-        {% else %}
+                    <div class="stat">
+                        <span class="stat-label">
+                            Games Remaining
+                        </span>
 
-            <p>
-                You have reached today's limit of 3 games.
-            </p>
-
-        {% endif %}
-
-    {% else %}
-
-        <h2>Game #{{ game["id"] }}</h2>
-
-        <p>
-            Guesses:
-            {{ game["guesses_used"] }}
-            / 5
-        </p>
-
-
-        <!-- GAME BOARD -->
-
-        <div class="game-board">
-
-            {% for row_number in range(5) %}
-
-                <div class="guess-row">
-
-                    {% if row_number < evaluations|length %}
-
-                        {% set row = evaluations[row_number] %}
-
-                        {% for index in range(5) %}
-
-                            <div
-                                class="tile {{ row['evaluation'][index]|lower }}"
-                            >
-                                {{ row["guess"][index] }}
-                            </div>
-
-                        {% endfor %}
-
-                    {% else %}
-
-                        {% for index in range(5) %}
-
-                            <div class="tile empty">
-                                &nbsp;
-                            </div>
-
-                        {% endfor %}
-
-                    {% endif %}
+                        <strong>
+                            {{ games_remaining }}
+                        </strong>
+                    </div>
 
                 </div>
 
-            {% endfor %}
 
-        </div>
+                {% if games_remaining > 0 %}
+
+                    <form
+                        method="POST"
+                        action="{{ url_for('game.start_game') }}"
+                    >
+
+                        <button
+                            type="submit"
+                            class="button button-primary large-button"
+                        >
+                            Start New Game
+                        </button>
+
+                    </form>
+
+                {% else %}
+
+                    <div class="limit-message">
+
+                        <strong>Daily limit reached</strong>
+
+                        <p>
+                            You have already played 3 games today.
+                            Come back tomorrow for another challenge.
+                        </p>
+
+                    </div>
+
+                {% endif %}
+
+            </section>
+
+        </main>
 
 
-        <!-- GUESS INPUT -->
+    {% else %}
 
-        {% if game["status"] == "ACTIVE" %}
+        <main class="game-container">
 
-            <form
-                method="POST"
-                action="{{ url_for(
-                    'game.make_guess',
-                    game_id=game['id']
-                ) }}"
-                id="guess-form"
-            >
+            <section class="game-card">
 
-                <label for="guess">
-                    Enter your 5-letter word:
-                </label>
+                <div class="game-header">
 
-                <input
-                    type="text"
-                    id="guess"
-                    name="guess"
-                    minlength="5"
-                    maxlength="5"
-                    pattern="[A-Za-z]{5}"
-                    autocomplete="off"
-                    required
-                >
+                    <div>
+                        <h2>Game #{{ game["id"] }}</h2>
 
-                <button type="submit">
-                    Guess
-                </button>
+                        <p class="game-description">
+                            Find the hidden five-letter word.
+                        </p>
+                    </div>
 
-            </form>
+                    <div class="guess-counter">
+                        {{ game["guesses_used"] }} / 5
+                    </div>
 
-        {% elif game["status"] == "WON" %}
+                </div>
 
-            <h3>
-                🎉 Congratulations! You guessed the word!
-            </h3>
 
-        {% elif game["status"] == "LOST" %}
+                <!-- GAME BOARD -->
 
-            <h3>
-                Better luck next time!
-            </h3>
+                <div class="game-board">
 
-        {% endif %}
+                    {% for row_number in range(5) %}
+
+                        <div class="guess-row">
+
+                            {% if row_number < evaluations|length %}
+
+                                {% set row = evaluations[row_number] %}
+
+                                {% for index in range(5) %}
+
+                                    <div
+                                        class="tile {{ row['evaluation'][index]|lower }}"
+                                    >
+                                        {{ row["guess"][index] }}
+                                    </div>
+
+                                {% endfor %}
+
+                            {% else %}
+
+                                {% for index in range(5) %}
+
+                                    <div class="tile empty">
+                                        &nbsp;
+                                    </div>
+
+                                {% endfor %}
+
+                            {% endif %}
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+
+                <div class="legend">
+
+                    <div>
+                        <span class="legend-tile correct"></span>
+                        Correct position
+                    </div>
+
+                    <div>
+                        <span class="legend-tile present"></span>
+                        Wrong position
+                    </div>
+
+                    <div>
+                        <span class="legend-tile absent"></span>
+                        Not in word
+                    </div>
+
+                </div>
+
+
+                <!-- GUESS INPUT -->
+
+                {% if game["status"] == "ACTIVE" %}
+
+                    <form
+                        method="POST"
+                        action="{{ url_for(
+                            'game.make_guess',
+                            game_id=game['id']
+                        ) }}"
+                        id="guess-form"
+                        class="guess-form"
+                    >
+
+                        <label for="guess">
+                            Enter your 5-letter word
+                        </label>
+
+                        <div class="guess-input-row">
+
+                            <input
+                                type="text"
+                                id="guess"
+                                name="guess"
+                                minlength="5"
+                                maxlength="5"
+                                pattern="[A-Za-z]{5}"
+                                autocomplete="off"
+                                autocapitalize="characters"
+                                spellcheck="false"
+                                placeholder="ABCDE"
+                                required
+                            >
+
+                            <button
+                                type="submit"
+                                class="button button-primary"
+                            >
+                                Guess
+                            </button>
+
+                        </div>
+
+                        <p class="input-hint">
+                            Use exactly five English letters.
+                        </p>
+
+                    </form>
+
+
+                {% elif game["status"] == "WON" %}
+
+                    <div class="result-message success">
+
+                        <div class="result-icon">🎉</div>
+
+                        <h3>Congratulations!</h3>
+
+                        <p>
+                            You guessed the word correctly.
+                        </p>
+
+                    </div>
+
+
+                {% elif game["status"] == "LOST" %}
+
+                    <div class="result-message failure">
+
+                        <div class="result-icon">😔</div>
+
+                        <h3>Better luck next time!</h3>
+
+                        <p>You used all five guesses.</p>
+
+                        <div class="answer-box">
+                            The word was
+                            <strong>{{ game["target_word"] }}</strong>
+                        </div>
+
+                    </div>
+
+                {% endif %}
+
+            </section>
+
+        </main>
 
     {% endif %}
 
-
-    <p>
-        <a href="{{ url_for('auth.dashboard') }}">
-            Dashboard
-        </a>
-    </p>
+</div>
 
 
-    <script
-        src="{{ url_for('static', filename='js/game.js') }}"
-    ></script>
+<script
+    src="{{ url_for('static', filename='js/game.js') }}"
+></script>
 
 </body>
-
 </html>

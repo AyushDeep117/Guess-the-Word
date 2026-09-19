@@ -234,3 +234,21 @@ def submit_guess(game_id, user_id, guess):
 
     finally:
         connection.close()
+
+def is_valid_dictionary_word(word):
+    connection = get_connection()
+
+    try:
+        row = connection.execute(
+            """
+            SELECT 1
+            FROM words
+            WHERE word = ?
+            """,
+            (word.upper(),),
+        ).fetchone()
+
+        return row is not None
+
+    finally:
+        connection.close()
