@@ -72,3 +72,6 @@ CREATE TABLE IF NOT EXISTS guesses (
 
     CHECK (guess = upper(guess))
 );
+
+CREATE INDEX IF NOT EXISTS idx_games_user_started
+ON games(user_id, started_at);
