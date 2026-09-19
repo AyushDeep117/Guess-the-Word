@@ -17,7 +17,7 @@ def count_games_today(user_id):
             SELECT COUNT(*) AS game_count
             FROM games
             WHERE user_id = ?
-            AND DATE(started_at) = DATE('now', 'localtime')
+            AND DATE(started_at, 'localtime') = DATE('now', 'localtime')
             """,
             (user_id,),
         ).fetchone()
