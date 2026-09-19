@@ -17,7 +17,7 @@ def count_games_today(user_id):
             SELECT COUNT(*) AS game_count
             FROM games
             WHERE user_id = ?
-            AND DATE(started_at) = DATE('now', 'localtime')
+            AND DATE(started_at, 'localtime') = DATE('now', 'localtime')
             """,
             (user_id,),
         ).fetchone()
@@ -231,6 +231,24 @@ def submit_guess(game_id, user_id, guess):
     except Exception:
         connection.rollback()
         raise
+
+    finally:
+        connection.close()
+
+def is_valid_dictionary_word(word):
+    connection = get_connection()
+
+    try:
+        row = connection.execute(
+            """
+            SELECT 1
+            FROM words
+            WHERE word = ?
+            """,
+            (word.upper(),),
+        ).fetchone()
+
+        return row is not None
 
     finally:
         connection.close()

@@ -19,14 +19,25 @@ def validate_username(username):
     return True, ""
 
 def validate_guess(guess):
+    """
+    Validate a player guess.
+
+    Requirements:
+    - Must be provided
+    - Must contain exactly 5 characters
+    - Must contain English alphabetic characters only
+    """
+
     if not guess:
         return False, "Guess is required."
+
+    guess = guess.strip()
 
     if len(guess) != 5:
         return False, "Guess must contain exactly 5 letters."
 
-    if not guess.isalpha():
-        return False, "Guess must contain letters only."
+    if not re.fullmatch(r"[A-Za-z]{5}", guess):
+        return False, "Guess must contain English letters only."
 
     return True, ""
 

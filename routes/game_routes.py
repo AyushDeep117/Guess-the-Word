@@ -111,13 +111,16 @@ def play_game(game_id):
         )
 
     safe_game = {
-        "id": game["id"],
-        "user_id": game["user_id"],
-        "status": game["status"],
-        "guesses_used": game["guesses_used"],
-        "started_at": game["started_at"],
-        "completed_at": game["completed_at"],
-    }
+    "id": game["id"],
+    "user_id": game["user_id"],
+    "status": game["status"],
+    "guesses_used": game["guesses_used"],
+    "started_at": game["started_at"],
+    "completed_at": game["completed_at"],
+    "target_word": game["target_word"]
+        if game["status"] == "LOST"
+        else None,
+}
 
     return render_template(
         "game.html",

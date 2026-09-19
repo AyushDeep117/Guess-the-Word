@@ -3,48 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+
+    <title>Admin Dashboard - Guess The Word</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
 </head>
 
 <body>
 
-    <h1>Guess The Word</h1>
+<div class="page-container">
 
-    <h2>Admin Dashboard</h2>
+    <header class="topbar">
+        <div>
+            <h1>Guess The Word</h1>
+            <p class="subtitle">Admin Dashboard</p>
+        </div>
 
-    <p>Welcome, {{ session["username"] }}!</p>
-
-    <p>Role: {{ session["role"] }}</p>
-
-    <h3>Reports</h3>
-
-<ul>
-
-    <li>
-        <a href="{{ url_for('admin.daily_report') }}">
-            Daily Report
+        <a
+            href="{{ url_for('auth.logout') }}"
+            class="button button-secondary"
+        >
+            Logout
         </a>
-    </li>
+    </header>
 
-    <li>
-        <a href="{{ url_for('admin.user_report') }}">
-            User Report
-        </a>
-    </li>
+    <main class="dashboard">
 
-</ul>
+        <section class="welcome-card">
 
-    <p>
-        Daily Report will be available here.
-    </p>
+            <h2>
+                Welcome, {{ session["username"] }} 👋
+            </h2>
 
-    <p>
-        User Report will be available here.
-    </p>
+            <p>
+                Monitor game activity and review player performance.
+            </p>
 
-    <p>
-        <a href="{{ url_for('auth.logout') }}">Logout</a>
-    </p>
+        </section>
+
+        <section class="report-grid">
+
+            <a
+                href="{{ url_for('admin.daily_report') }}"
+                class="report-card-link"
+            >
+                <div class="report-card-icon">📊</div>
+
+                <h3>Daily Report</h3>
+
+                <p>
+                    View the number of players and successful guesses
+                    for a selected day.
+                </p>
+
+                <span class="report-action">
+                    View Report →
+                </span>
+            </a>
+
+            <a
+                href="{{ url_for('admin.user_report') }}"
+                class="report-card-link"
+            >
+                <div class="report-card-icon">👤</div>
+
+                <h3>User Report</h3>
+
+                <p>
+                    Review individual player activity, words tried,
+                    and correct guesses.
+                </p>
+
+                <span class="report-action">
+                    View Report →
+                </span>
+            </a>
+
+        </section>
+
+    </main>
+
+</div>
 
 </body>
 </html>
