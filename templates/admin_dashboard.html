@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,79 +15,103 @@
 
 <body>
 
-<div class="page-container">
+    <nav class="navbar">
 
-    <header class="topbar">
-        <div>
-            <h1>Guess The Word</h1>
-            <p class="subtitle">Admin Dashboard</p>
+        <div class="brand">
+            Guess The Word
         </div>
 
-        <a
-            href="{{ url_for('auth.logout') }}"
-            class="button button-secondary"
-        >
-            Logout
-        </a>
-    </header>
+        <div class="nav-right">
 
-    <main class="dashboard">
+            <span class="admin-badge">
+                ADMIN
+            </span>
 
-        <section class="welcome-card">
+            <a
+                href="{{ url_for('auth.logout') }}"
+                class="nav-link"
+            >
+                Logout
+            </a>
 
-            <h2>
-                Welcome, {{ session["username"] }} 👋
-            </h2>
+        </div>
 
-            <p>
-                Monitor game activity and review player performance.
+    </nav>
+
+
+    <main class="dashboard-container">
+
+        <section class="hero-section">
+
+            <p class="eyebrow">
+                ADMINISTRATION
+            </p>
+
+            <h1>
+                Admin Dashboard
+            </h1>
+
+            <p class="hero-subtitle">
+                Monitor gameplay and analyze player activity.
             </p>
 
         </section>
+
 
         <section class="report-grid">
 
             <a
                 href="{{ url_for('admin.daily_report') }}"
-                class="report-card-link"
+                class="report-card-modern"
             >
-                <div class="report-card-icon">📊</div>
 
-                <h3>Daily Report</h3>
+                <div class="report-icon">
+                    📊
+                </div>
+
+                <h2>
+                    Daily Report
+                </h2>
 
                 <p>
-                    View the number of players and successful guesses
-                    for a selected day.
+                    View the number of users and successful games
+                    for a selected date.
                 </p>
 
-                <span class="report-action">
+                <span class="card-link">
                     View Report →
                 </span>
+
             </a>
+
 
             <a
                 href="{{ url_for('admin.user_report') }}"
-                class="report-card-link"
+                class="report-card-modern"
             >
-                <div class="report-card-icon">👤</div>
 
-                <h3>User Report</h3>
+                <div class="report-icon">
+                    👤
+                </div>
+
+                <h2>
+                    User Report
+                </h2>
 
                 <p>
-                    Review individual player activity, words tried,
-                    and correct guesses.
+                    View gameplay history and performance
+                    statistics for individual users.
                 </p>
 
-                <span class="report-action">
+                <span class="card-link">
                     View Report →
                 </span>
+
             </a>
 
         </section>
 
     </main>
-
-</div>
 
 </body>
 </html>

@@ -65,13 +65,12 @@ def login():
         if user is None:
             flash("Invalid username or password.", "error")
             return render_template("login.html")
-
         session.clear()
-
         session["user_id"] = user["id"]
         session["username"] = user["username"]
         session["role"] = user["role"]
-
+        if user["role"] == "ADMIN":
+            return redirect(url_for("admin.dashboard"))
         return redirect(url_for("auth.dashboard"))
 
     return render_template("login.html")

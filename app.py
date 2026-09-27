@@ -1,4 +1,4 @@
-from flask import Flask, session
+from flask import Flask, session, redirect, url_for
 from routes.admin_routes import admin_bp
 from config import Config
 from routes.auth_routes import auth_bp
@@ -13,21 +13,13 @@ def create_app():
 
     @app.route("/")
     def home():
-
         if "user_id" not in session:
-            return """
-                <h1>Guess The Word</h1>
-                <a href="/login">Login</a>
-                <br>
-                <a href="/register">Register</a>
-            """
+            return redirect(url_for("auth.login"))
 
-        return f"""
-            <h1>Guess The Word</h1>
-            <p>Welcome, {session["username"]}!</p>
-            <p>Role: {session["role"]}</p>
-            <a href="/logout">Logout</a>
-        """
+        if session["role"] == "ADMIN":
+            return redirect(url_for("admin.dashboard"))
+
+        return redirect(url_for("auth.dashboard"))
 
     return app
 
