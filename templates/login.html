@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Login - Guess The Word</title>
 
     <link
@@ -11,66 +13,101 @@
     >
 </head>
 
-<body>
+<body class="auth-page">
 
-<div class="auth-container">
+    <main class="auth-container">
 
-    <div class="auth-card">
+        <div class="auth-card">
 
-        <h1>Guess The Word</h1>
+            <div class="auth-logo">
+                🎯
+            </div>
 
-        <p class="subtitle">
-            Sign in to continue playing
-        </p>
+            <h1>
+                Guess The Word
+            </h1>
 
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="flash-message {{ category }}">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
+            <p class="auth-subtitle">
+                Welcome back. Sign in to continue.
+            </p>
 
-        <form method="POST">
 
-            <label>Username</label>
+            {% with messages = get_flashed_messages(with_categories=true) %}
 
-            <input
-                type="text"
-                name="username"
-                required
-            >
+                {% if messages %}
 
-            <label>Password</label>
+                    {% for category, message in messages %}
 
-            <input
-                type="password"
-                name="password"
-                required
-            >
+                        <div class="flash {{ category }}">
+                            {{ message }}
+                        </div>
 
-            <button
-                type="submit"
-                class="button button-primary large-button"
-            >
-                Login
-            </button>
+                    {% endfor %}
 
-        </form>
+                {% endif %}
 
-        <p class="auth-footer">
-            New player?
+            {% endwith %}
 
-            <a href="{{ url_for('auth.register') }}">
-                Create an account
-            </a>
-        </p>
 
-    </div>
+            <form method="POST">
 
-</div>
+                <div class="form-group">
+
+                    <label for="username">
+                        Username
+                    </label>
+
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        autocomplete="username"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        autocomplete="current-password"
+                        required
+                    >
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="button button-primary large-button"
+                >
+                    Login
+                </button>
+
+            </form>
+
+
+            <p class="auth-footer">
+
+                Don't have an account?
+
+                <a href="{{ url_for('auth.register') }}">
+                    Create one
+                </a>
+
+            </p>
+
+        </div>
+
+    </main>
 
 </body>
 </html>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,64 +15,103 @@
 
 <body>
 
-<div class="page-container">
-
-    <header class="topbar">
-        <div>
-            <h1>Guess The Word</h1>
-            <p class="subtitle">Player Dashboard</p>
+    <nav class="navbar">
+        <div class="brand">
+            Guess The Word
         </div>
 
-        <a
-            href="{{ url_for('auth.logout') }}"
-            class="button button-secondary"
-        >
-            Logout
-        </a>
-    </header>
+        <div class="nav-right">
+            <span class="user-badge">
+                {{ session["username"] }}
+            </span>
 
-    <main class="dashboard">
+            <a
+                href="{{ url_for('auth.logout') }}"
+                class="nav-link"
+            >
+                Logout
+            </a>
+        </div>
+    </nav>
 
-        <section class="welcome-card">
 
-            <h2>
-                Welcome, {{ session["username"] }} 👋
-            </h2>
+    <main class="dashboard-container">
 
-            <p>
+        <section class="hero-section">
+
+            <p class="eyebrow">
+                PLAYER DASHBOARD
+            </p>
+
+            <h1>
+                Welcome back, {{ session["username"] }} 👋
+            </h1>
+
+            <p class="hero-subtitle">
                 Ready to test your word skills?
             </p>
 
-            <a
-                href="{{ url_for('game.game_home') }}"
-                class="button button-primary play-button"
-            >
-                🎮 Play Game
-            </a>
+        </section>
+
+
+        <section class="dashboard-card">
+
+            <div class="card-icon">
+                🎮
+            </div>
+
+            <div class="card-content">
+
+                <h2>
+                    Guess The Word
+                </h2>
+
+                <p>
+                    Start a new game and find the hidden
+                    five-letter word in five attempts.
+                </p>
+
+                <a
+                    href="{{ url_for('game.game_home') }}"
+                    class="button button-primary"
+                >
+                    Play Game →
+                </a>
+
+            </div>
 
         </section>
 
-        <section class="info-card">
 
-            <div class="info-item">
-                <span class="info-label">Role</span>
-                <span class="info-value">
-                    {{ session["role"] }}
-                </span>
+        <section class="info-grid">
+
+            <div class="info-card">
+                <span class="info-icon">🎯</span>
+                <h3>5 Attempts</h3>
+                <p>
+                    You have five guesses to find the word.
+                </p>
             </div>
 
-            <div class="info-item">
-                <span class="info-label">Daily Limit</span>
-                <span class="info-value">
-                    3 Games
-                </span>
+            <div class="info-card">
+                <span class="info-icon">📅</span>
+                <h3>3 Games Daily</h3>
+                <p>
+                    You can play up to three games every day.
+                </p>
+            </div>
+
+            <div class="info-card">
+                <span class="info-icon">🟩</span>
+                <h3>Wordle Feedback</h3>
+                <p>
+                    Use the colored tiles to narrow down the word.
+                </p>
             </div>
 
         </section>
 
     </main>
-
-</div>
 
 </body>
 </html>
